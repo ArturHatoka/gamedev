@@ -4,7 +4,8 @@
             <v-col
                     v-for="(pack,i) in getPackages"
                     :key="i"
-                    cols="6"
+                    cols="12"
+                    sm="6"
             >
                 <v-card>
                     <v-card-title class="pb-1">

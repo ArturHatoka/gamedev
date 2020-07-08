@@ -1,9 +1,10 @@
 <template>
     <v-dialog
         v-model="dialog"
-        width="25%"
+        max-width="400px"
     >
-        <v-card>
+        <v-card
+        >
             <v-card-title class="headline">{{getPackageInfo.name}}</v-card-title>
             <v-card-text>
                 <h3>Type:</h3>
@@ -45,6 +46,7 @@
             </v-card-text>
             <v-card-actions>
                 <v-btn
+                    class="ml-auto"
                     color="green darken-1"
                     text
                     @click="dialog = false"
