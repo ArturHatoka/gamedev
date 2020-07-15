@@ -18,15 +18,9 @@ export default new Vuex.Store({
     dialog: false
   },
   mutations: {
-    setHotPackages(state){
-      Vue.axios.get(`https://data.jsdelivr.com/v1/stats/packages/day?limit=${state.hitsPerPage}&page=${state.page}`)
-          .then((response) => {
-            state.packages = response.data
-            state.status = true
-          })
-          .catch(err => {
-            alert(err);
-          });
+    setHotPackages(state, data){
+      state.packages = data
+      state.status = true
     },
     setSearching(state){
       index.search(state.search,
@@ -64,17 +58,11 @@ export default new Vuex.Store({
       state.dialog = Boolean(val)
       if (!val) state.package = {}
     },
-    setPackageInfo(state, val){
-      Vue.axios.get(`https://data.jsdelivr.com/v1/package/${val.type}/${val.name}`)
-        .then((response) => {
-          state.package = response.data
-          state.package['type'] = val.type
-          state.package['name'] = val.name
-          state.dialog = true
-        })
-        .catch(() => {
-          state.package = `Couldn't fetch package`
-        })
+    setPackageInfo(state, pack){
+      state.package = pack.info
+      state.package['type'] = pack.type
+      state.package['name'] = pack.name
+      state.dialog = true
     },
   },
   getters: {
@@ -92,8 +80,23 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    setHotPackages({commit}){
-      commit('setHotPackages')
+    setHotPackages({commit, state}){
+      Vue.axios.get(`https://data.jsdelivr.com/v1/stats/packages/day?limit=${state.hitsPerPage}&page=${state.page}`)
+          .then((response) => {
+            commit('setHotPackages', response.data)
+          })
+          .catch(err => {
+            alert(err);
+          });
+    },
+    setPackageInfo({commit}, pack){
+      Vue.axios.get(`https://data.jsdelivr.com/v1/package/${pack.type}/${pack.name}`)
+          .then((response) => {
+            commit('setPackageInfo', {type:pack.type, name:pack.name, info:response.data})
+          })
+          .catch(() => {
+            alert(`Couldn't fetch package`)
+          })
     },
     setSearching({commit}){
       commit('setSearching')

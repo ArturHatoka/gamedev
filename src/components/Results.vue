@@ -48,11 +48,10 @@ export default {
     },
     methods:{
         ...mapMutations([
-            'setDialog',
-            'setPackageInfo'
+            'setDialog'
         ]),
         openModal(type, name){
-            this.setPackageInfo({type:type, name:name})
+            this.$store.dispatch('setPackageInfo', {type:type, name:name});
         }
     }
 }
